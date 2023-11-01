@@ -2,7 +2,7 @@
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, EnvironmentVariable, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch import LaunchDescription
 
 
@@ -38,7 +38,7 @@ def generate_launch_description():
         Node(
             package="as2_platform_crazyflie",
             executable="as2_platform_crazyflie_swarm_node",
-            name="platform",
+            name="platform_crazyflie",
             output="screen",
             emulate_tty=True,
             parameters=[

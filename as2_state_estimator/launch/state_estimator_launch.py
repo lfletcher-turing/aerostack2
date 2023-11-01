@@ -3,6 +3,9 @@
 import os
 import sys
 import logging
+from typing import List
+from xml.etree import ElementTree
+from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
@@ -12,6 +15,23 @@ from launch.substitutions import LaunchConfiguration, EnvironmentVariable, PathJ
 
 FORMAT = '[%(levelname)s] [launch]: %(message)s'
 logging.basicConfig(format=FORMAT)
+
+
+def get_available_plugins(package_name: str) -> List[str]:
+    """
+    Parse plugins.xml file from package and return a list of plugins from a specific type
+    """
+    plugins_file = os.path.join(
+        get_package_share_directory(package_name),
+        'plugins.xml'
+    )
+    root = ElementTree.parse(plugins_file).getroot()
+
+    available_plugins = []
+    for class_element in root.findall('class'):
+        available_plugins.append(
+            class_element.attrib['type'].split('::')[0])
+    return available_plugins
 
 
 def get_state_estimator_node(context):
@@ -28,8 +48,7 @@ def get_state_estimator_node(context):
         'plugin_name': plugin_name,
         'use_sim_time': LaunchConfiguration('use_sim_time'),
         'base_frame': LaunchConfiguration('base_frame'),
-        'global_ref_frame': LaunchConfiguration(
-            'global_ref_frame'),
+        'global_ref_frame': LaunchConfiguration('global_ref_frame'),
         'odom_frame': LaunchConfiguration('odom_frame'),
         'map_frame': LaunchConfiguration('map_frame'),
     }]
@@ -46,13 +65,13 @@ def get_state_estimator_node(context):
                 FindPackageShare('as2_state_estimator'),
                 'plugins/' + plugin_name + '/config', 'default_state_estimator.yaml'
             ])
-        
-    
+
     parameters.append(plugin_config_file)
 
     node = Node(
         package='as2_state_estimator',
         executable='as2_state_estimator_node',
+        name=f'state_estimator_{plugin_name}',
         namespace=LaunchConfiguration('namespace'),
         parameters=parameters,
         output='screen',
@@ -67,7 +86,8 @@ def generate_launch_description():
     launch_description = LaunchDescription([
         DeclareLaunchArgument('namespace', default_value=EnvironmentVariable(
             'AEROSTACK2_SIMULATION_DRONE_ID')),
-        DeclareLaunchArgument('plugin_name'),
+        DeclareLaunchArgument(
+            'plugin_name', choices=get_available_plugins('as2_state_estimator')),
         DeclareLaunchArgument('plugin_config_file', default_value=''),
         DeclareLaunchArgument('use_sim_time', default_value='false'),
         DeclareLaunchArgument('base_frame', default_value='base_link'),

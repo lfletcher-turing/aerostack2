@@ -4,13 +4,13 @@ import os
 import sys
 import logging
 from typing import List
+from xml.etree import ElementTree
+from ament_index_python.packages import get_package_share_directory
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from ament_index_python.packages import get_package_share_directory
-from xml.etree import ElementTree
 
 FORMAT = '[%(levelname)s] [launch]: %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -72,10 +72,10 @@ def get_controller_manager_node(context):
 
     parameters.append(controller_config_file)
 
-
     node = Node(
         package='as2_motion_controller',
         executable='as2_motion_controller_node',
+        name=f'controller_manager_{plugin_name}',
         namespace=LaunchConfiguration('namespace'),
         parameters=parameters,
         output='screen',
