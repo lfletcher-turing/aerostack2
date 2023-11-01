@@ -78,10 +78,12 @@ void Plugin::checkParamList(const std::string &param,
 bool Plugin::updateParams(const std::vector<rclcpp::Parameter> &parameters) {
   for (auto &param : parameters) {
     std::string param_name = param.get_name();
+    std::string header     = param_name.substr(0, param_name.find("."));
+    param_name             = param_name.substr(param_name.find(".") + 1);
 
     RCLCPP_DEBUG(node_ptr_->get_logger(), "Updating parameter %s", param_name.c_str());
 
-    if (param.get_name() == "proportional_limitation") {
+    if (param.get_name() == "controller.proportional_limitation") {
       proportional_limitation_ = param.get_value<bool>();
       if (!flags_.plugin_parameters_read) {
         checkParamList(param_name, plugin_parameters_to_read_, flags_.plugin_parameters_read);

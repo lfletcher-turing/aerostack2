@@ -61,8 +61,11 @@ bool Plugin::checkParamList(const std::string& param, std::vector<std::string>& 
 };
 
 void Plugin::updateDFParameter(std::string _parameter_name, const rclcpp::Parameter& _param) {
-  std::string controller    = _parameter_name.substr(0, _parameter_name.find("."));
-  std::string param_subname = _parameter_name.substr(_parameter_name.find(".") + 1);
+  std::string header = _parameter_name.substr(0, _parameter_name.find("."));
+  std::string body   = _parameter_name.substr(_parameter_name.find(".") + 1);
+
+  std::string controller    = _parameter_name.substr(0, body.find("."));
+  std::string param_subname = _parameter_name.substr(body.find(".") + 1);
 
   if (controller == "trajectory_control") {
     // TODO check if this is a good way to do it or it is better to write the full name
