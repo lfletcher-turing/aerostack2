@@ -132,6 +132,12 @@ void PointGimbalBehavior::on_execution_end(const as2_behavior::ExecutionStatus &
 void PointGimbalBehavior::gimbal_orientation_callback(
   const geometry_msgs::msg::QuaternionStamped::SharedPtr msg)
 {
+  // FIXME: fix for the DJI OSDK, getting the quaternion as euler angle sin deg
+  gimbal_status_.orientation.x = msg->quaternion.x;
+  gimbal_status_.orientation.y = msg->quaternion.y;
+  gimbal_status_.orientation.z = msg->quaternion.z;
+  return;
+
   double roll, pitch, yaw;
   as2::frame::quaternionToEuler(msg->quaternion, roll, pitch, yaw);
 

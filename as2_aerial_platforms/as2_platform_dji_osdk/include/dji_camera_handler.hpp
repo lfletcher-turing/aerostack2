@@ -107,8 +107,14 @@ class DJIGimbalHandler {
     geometry_msgs::msg::QuaternionStamped gimbal_status;
     gimbal_status.header.stamp = node_ptr_->now();
     gimbal_status.header.frame_id = "base_link";
-    as2::frame::eulerToQuaternion(gimbal_angle_.x, gimbal_angle_.y,
-                                  gimbal_angle_.z, gimbal_status.quaternion);
+    gimbal_status.quaternion.x = gimbal_angle_.x;
+    gimbal_status.quaternion.y = gimbal_angle_.y;
+    gimbal_status.quaternion.z = gimbal_angle_.z;
+    gimbal_status.quaternion.w = 0;
+
+    // FIXME: sending the euler angle in deg through the quaternion
+    // as2::frame::eulerToQuaternion(gimbal_angle_.x, gimbal_angle_.y,
+    //                               gimbal_angle_.z, gimbal_status.quaternion);
     gimbal_status_pub_->publish(gimbal_status);
 
     DJI::OSDK::GimbalModule::Rotation gimbal_rotation;
