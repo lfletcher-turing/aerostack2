@@ -122,6 +122,7 @@ class LidarTypeEnum(str, Enum):
     POINT_LIDAR = "point_lidar"  # FIXME: not working
     PLANAR_LIDAR = "planar_lidar"
     LIDAR_3D = "lidar_3d"
+    MULTI_RANGER = 'multi_ranger'
 
     @staticmethod
     def bridges(

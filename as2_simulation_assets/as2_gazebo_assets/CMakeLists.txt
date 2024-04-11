@@ -110,12 +110,25 @@ ament_target_dependencies(gimbal_bridge
   ignition-transport11
 )
 
+add_executable(set_model_pose_bridge src/set_model_pose_bridge.cpp)
+ament_target_dependencies(set_model_pose_bridge
+  rclcpp
+  ros_gz_bridge
+  std_msgs
+  as2_core
+  as2_msgs
+  geometry_msgs
+  ignition-msgs8
+  ignition-transport11
+)
+
 install(TARGETS
   azimuth_bridge
   gps_bridge
   ground_truth_bridge
   object_tf_broadcaster
   gimbal_bridge
+  set_model_pose_bridge
   DESTINATION lib/${PROJECT_NAME})
 
 # ============================================================================

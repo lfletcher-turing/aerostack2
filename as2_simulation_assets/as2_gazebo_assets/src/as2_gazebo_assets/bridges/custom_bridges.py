@@ -134,3 +134,16 @@ def gimbal_node(world_name: str, namespace: str, model_sensor_name: str,
             }
         ]
     )
+
+
+def set_pose_bridge(world_name: str) -> Node:
+    """Custom set pose bridge
+    """
+    return Node(
+        package='as2_gazebo_assets',
+        executable='set_model_pose_bridge',
+        output='screen',
+        parameters=[
+            {'world_name': world_name}
+        ]
+    )

@@ -45,9 +45,11 @@ set(MSGS_FILES
   "msg/BehaviorStatus.msg"
   "msg/YawMode.msg"
   "msg/GimbalControl.msg"
+  "msg/LabeledOccupancyGrid.msg"
 )
 
 set(SRVS_FILES
+  "srv/AllocateFrontier.srv"
   "srv/DynamicFollower.srv"
   "srv/DynamicLand.srv"
   "srv/GeopathToPath.srv"
@@ -60,6 +62,7 @@ set(SRVS_FILES
   "srv/SetOrigin.srv"
   "srv/SetPlatformStateMachineEvent.srv"
   "srv/SetSpeed.srv"
+  "srv/SetPoseWithID.srv"
 )
 
 set(ACTION_FILES
@@ -73,6 +76,7 @@ set(ACTION_FILES
   "action/SetOffboardMode.action"
   "action/FollowReference.action"
   "action/PointGimbal.action"
+  "action/NavigateToPoint.action"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}

@@ -40,17 +40,23 @@ from launch_ros.actions import Node
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
+import json
 
 from as2_gazebo_assets.bridges import bridges as gz_bridges
+from as2_gazebo_assets.bridges import custom_bridges as gz_custom_bridges
 
 
 def world_bridges(context):
     """Return world bridges. Mainly clock if sim_time enabled.
     """
     use_sim_time = LaunchConfiguration('use_sim_time').perform(context)
-    use_sim_time = use_sim_time.lower() in ['true', 't', 'yes', 'y', '1']
+    config_file = LaunchConfiguration(
+        'simulation_config_file').perform(context)
+    with open(config_file, 'r', encoding='utf-8') as stream:
+        config = json.load(stream)
     bridges = [
     ]
+    bridges.append(gz_bridges.world_control(config['world_name']))
     if use_sim_time:
         bridges.append(gz_bridges.clock())
     nodes = []
@@ -63,6 +69,7 @@ def world_bridges(context):
         remappings=[bridge.remapping() for bridge in bridges]
     )
     nodes.append(node)
+    nodes.append(gz_custom_bridges.set_pose_bridge(config['world_name']))
 
     return nodes
 

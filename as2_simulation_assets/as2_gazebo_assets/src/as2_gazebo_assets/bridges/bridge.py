@@ -13,12 +13,14 @@ class BridgeDirection(Enum):
     BIDIRECTIONAL = 0
     GZ_TO_ROS = 1
     ROS_TO_GZ = 2
+    NONE = 3
 
 
 DIRECTION_SYMS = {
     BridgeDirection.BIDIRECTIONAL: '@',
     BridgeDirection.GZ_TO_ROS: '[',
     BridgeDirection.ROS_TO_GZ: ']',
+    BridgeDirection.NONE: '',
 }
 
 
@@ -38,6 +40,13 @@ class Bridge:
         Return argument for ros_gz_bridge
         """
         out = f'{self.gz_topic}@{self.ros_type}{DIRECTION_SYMS[self.direction]}{self.gz_type}'
+        return out
+
+    def serviceArgument(self):
+        """
+        Return argument for ros_gz_bridge
+        """
+        out = f'{self.gz_topic}@{self.ros_type}'
         return out
 
     def remapping(self):
