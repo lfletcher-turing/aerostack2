@@ -11,6 +11,18 @@ endif()
 # find_package(gz-gazebo6 REQUIRED)
 # set(IGN_GAZEBO_VER ${gz-gazebo6_VERSION_MAJOR})
 
+#by default use the fortress version of ignition
+set(GZ_VERSION "fortress")
+
+# check if harmonic libs are available
+find_package(gz-common5 QUIET)
+if (gz-common5_FOUND)
+  set(GZ_VERSION "harmonic")
+endif()
+
+message("Using Ignition version: ${GZ_VERSION}")
+
+if ( ${GZ_VERSION} STREQUAL "harmonic" )
 
 set(GZ_COMMON "gz-common5")
 set(GZ_MATH "gz-math7")
@@ -18,6 +30,18 @@ set(GZ_TRANSPORT "gz-transport13")
 set(GZ_PLUGIN "gz-plugin2")
 set(GZ_RENDERING "gz-rendering8")
 set(GZ_MSGS "gz-msgs10")
+
+elseif ( ${GZ_VERSION} STREQUAL "fortress" )
+
+set(GZ_COMMON "ignition-common4")
+set(GZ_MATH "ignition-math6")
+set(GZ_TRANSPORT "ignition-transport11")
+set(GZ_PLUGIN "ignition-plugin1")
+set(GZ_RENDERING "ignition-rendering6")
+set(GZ_MSGS "ignition-msgs8")
+
+endif()
+
 
 
 find_package(${GZ_COMMON} REQUIRED COMPONENTS graphics)
