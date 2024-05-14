@@ -54,6 +54,10 @@ class CameraTypeEnum(str, Enum):
     VGA_CAM = "vga_camera"
     HD_CAM = "hd_camera"
     SEMANTIC_CAM = "semantic_camera"
+    REAR_CAM = "rear_camera"
+    FRONT_CAM = "front_camera"
+    LEFT_CAM = "left_camera"
+    RIGHT_CAM = "right_camera"
 
     @staticmethod
     def bridges(
